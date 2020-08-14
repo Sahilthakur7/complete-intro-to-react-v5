@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import pet, { ANIMALS } from "@frontendmasters/pet";
 import useDropdown from "./useDropdown";
 import Results from "./Results";
 import ThemeContext from "./ThemeContext";
+import DisplayNames from "./DisplayNames";
 
 const SearchParams = () => {
   const [theme, setTheme] = useContext(ThemeContext);
@@ -11,6 +12,8 @@ const SearchParams = () => {
   const [pets, setPets] = useState([]);
   const [animal, AnimalDropdown] = useDropdown("Animal", "dog", ANIMALS);
   const [breed, BreedDropdown, updateBreed] = useDropdown("Breed", "", breeds);
+  const [name, setName] = useState("");
+  const fName = useRef();
 
   async function requestPets() {
     const { animals } = await pet.animals({
@@ -34,6 +37,7 @@ const SearchParams = () => {
     }, console.error);
   }, [animal]);
 
+  console.log("fan", fName.current);
   return (
     <div className="search-params">
       <form
@@ -53,6 +57,8 @@ const SearchParams = () => {
         </label>
         <AnimalDropdown />
         <BreedDropdown />
+        <input value={name} onChange={e => setName(e.target.value)} />;
+        <input />
         <label htmlFor="location">
           Theme
           <select
@@ -68,7 +74,6 @@ const SearchParams = () => {
         </label>
         <button style={{ backgroundColor: theme }}>Submit</button>
       </form>
-      <Results pets={pets} />
     </div>
   );
 };
